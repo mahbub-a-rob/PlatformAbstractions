@@ -1,0 +1,25 @@
+﻿{
+    "version": "1.0.0-*",
+    "description": "Microsoft.Extensions.PlatformAbstractions.Tests Class Library",
+
+    "testRunner": "xunit",
+
+    "dependencies": {
+        "Microsoft.Extensions.PlatformAbstractions": "1.0.0-*",
+        "xunit": "2.1.0"
+    },
+
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+                "System.Runtime": ""
+            }
+        },
+        "dnxcore50": {
+            "dependencies": {
+                "NETStandard.Library": "1.0.0-rc2-23616",
+                "dotnet-test-xunit": "0.0.1-dev-1"
+            }
+        }
+    }
+}
