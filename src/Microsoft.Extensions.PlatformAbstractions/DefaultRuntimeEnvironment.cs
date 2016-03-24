@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.PlatformAbstractions.Native;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Extensions.PlatformAbstractions
 {
@@ -56,7 +57,17 @@ namespace Microsoft.Extensions.PlatformAbstractions
 #if NET451
             return Environment.Is64BitProcess ? "x64" : "x86";
 #else
-            return IntPtr.Size == 8 ? "x64" : "x86";
+            switch (RuntimeInformation.OSArchitecture)
+            {
+                case Architecture.X86:
+                    return "x86";
+                case Architecture.X64:
+                    return "x64";
+                case Architecture.Arm:
+                    return "arm";
+                default:
+                    return null;
+            }
 #endif
         }
 

@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.PlatformAbstractions
         public abstract IApplicationEnvironment Application { get; }
 
         public abstract IRuntimeEnvironment Runtime { get; }
-        
+
         public static void SetDefault(PlatformServices defaultPlatformServices)
         {
             _defaultPlatformServices = defaultPlatformServices;
