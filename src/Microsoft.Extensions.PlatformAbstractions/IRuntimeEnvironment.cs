@@ -26,12 +26,12 @@ namespace Microsoft.Extensions.PlatformAbstractions
         /// <summary>
         /// Gets the runtime type. Common values include CLR, CoreCLR and Mono.
         /// </summary>
-        string RuntimeType { get; }
+        RuntimeType RuntimeType { get; }
 
         /// <summary>
         /// Gets the runtime architecture. Common values include x86 and x64.
         /// </summary>
-        string RuntimeArchitecture { get; }
+        RuntimeArchitecture RuntimeArchitecture { get; }
 
         /// <summary>
         /// Gets the runtime version.

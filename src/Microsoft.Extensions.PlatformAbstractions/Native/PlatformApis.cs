@@ -17,31 +17,43 @@ namespace Microsoft.Extensions.PlatformAbstractions.Native
 
         public static string GetOSName()
         {
-            switch (GetOSPlatform())
+            var platform = GetOSPlatform();
+            if (platform == Platform.Windows)
             {
-                case Platform.Windows:
-                    return "Windows";
-                case Platform.Linux:
-                    return GetDistroId() ?? "Linux";
-                case Platform.Darwin:
-                    return "Mac OS X";
-                default:
-                    return "Unknown";
+                return "Windows";
+            }
+            else if (platform == Platform.Linux)
+            {
+                return GetDistroId() ?? "Linux";
+            }
+            else if (platform == Platform.Darwin)
+            {
+                return "Mac OS X";
+            }
+            else
+            {
+                return "Unknown";
             }
         }
 
         public static string GetOSVersion()
         {
-            switch (GetOSPlatform())
+            var platform = GetOSPlatform();
+            if (platform == Platform.Windows)
             {
-                case Platform.Windows:
-                    return NativeMethods.Windows.RtlGetVersion() ?? string.Empty;
-                case Platform.Linux:
-                    return GetDistroVersionId() ?? string.Empty;
-                case Platform.Darwin:
-                    return GetDarwinVersion() ?? string.Empty;
-                default:
-                    return string.Empty;
+                return NativeMethods.Windows.RtlGetVersion() ?? string.Empty;
+            }
+            else if (platform == Platform.Linux)
+            {
+                return GetDistroVersionId() ?? string.Empty;
+            }
+            else if (platform == Platform.Darwin)
+            {
+                return GetDarwinVersion() ?? string.Empty;
+            }
+            else
+            {
+                return string.Empty;
             }
         }
 
@@ -65,20 +77,9 @@ namespace Microsoft.Extensions.PlatformAbstractions.Native
             }
         }
 
-        public static Platform GetOSPlatform()
-        {
-            return _platform.Value;
-        }
-
-        private static string GetDistroId()
-        {
-            return _distroInfo.Value?.Id;
-        }
-
-        private static string GetDistroVersionId()
-        {
-            return _distroInfo.Value?.VersionId;
-        }
+        public static Platform GetOSPlatform() => _platform.Value;
+        private static string GetDistroId() => _distroInfo.Value?.Id;
+        private static string GetDistroVersionId() => _distroInfo.Value?.VersionId;
 
         private static DistroInfo LoadDistroInfo()
         {
@@ -153,15 +154,18 @@ namespace Microsoft.Extensions.PlatformAbstractions.Native
             {
                 return Platform.Windows;
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 return Platform.Linux;
             }
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 return Platform.Darwin;
             }
-            return Platform.Unknown;
+            else
+            {
+                return Platform.Unknown;
+            }
         }
 #endif
     }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.PlatformAbstractions.Native;
 
 namespace Microsoft.Extensions.PlatformAbstractions
@@ -26,29 +27,32 @@ namespace Microsoft.Extensions.PlatformAbstractions
 
         public string OperatingSystem { get; }
 
-        public string RuntimeArchitecture { get; }
+        public RuntimeArchitecture RuntimeArchitecture { get; }
 
-        public string RuntimeType { get; }
+        public RuntimeType RuntimeType { get; }
 
         public string RuntimeVersion { get; }
 
-        private string GetRuntimeType()
-        {
 #if NET451
-            return Type.GetType("Mono.Runtime") != null ? "Mono" : "CLR";
+        private RuntimeType GetRuntimeType() => Type.GetType("Mono.Runtime") != null ? RuntimeType.Mono : RuntimeType.NetFramework;
 #else
-            return "CoreCLR";
+        private RuntimeType GetRuntimeType() => RuntimeType.CoreCLR;
 #endif
-        }
 
-        private static string GetArch()
-        {
 #if NET451
-            return Environment.Is64BitProcess ? "x64" : "x86";
+        private static RuntimeArchitecture GetArch() => Environment.Is64BitProcess ? RuntimeArchitecture.X64 : RuntimeArchitecture.X86;
 #else
-            return IntPtr.Size == 8 ? "x64" : "x86";
-#endif
+        private static RuntimeArchitecture GetArch()
+        {
+            switch (RuntimeInformation.ProcessArchitecture)
+            {
+                case Architecture.X86: return RuntimeArchitecture.X86;
+                case Architecture.X64: return RuntimeArchitecture.X64;
+                case Architecture.Arm: return RuntimeArchitecture.Arm;
+                default: return RuntimeArchitecture.Unknown;
+            }
         }
+#endif
 
     }
 }
